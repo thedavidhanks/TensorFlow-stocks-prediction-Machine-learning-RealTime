@@ -104,7 +104,7 @@ def ADX(df: pd.DataFrame, period: int):
     df[f'ADX{period}'] = df[f'DX{period}'].ewm(alpha=alpha, adjust=False).mean()
     return df
 
-def extract_features(df: pd.DataFrame) -> pd.DataFrame:
+def extract_features(df: pd.DataFrame, extra_columns=False) -> pd.DataFrame:
     '''
     Generate technical indicator features with OHLC df.
 

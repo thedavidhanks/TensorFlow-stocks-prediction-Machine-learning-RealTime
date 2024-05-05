@@ -20,7 +20,7 @@ matplotlib
 scikit-learn
 investpy
 yfinance
-tensorflow-gpu
+# tensorflow-gpu
 xgboost
 imblearn
 setuptools
@@ -40,3 +40,5 @@ scikeras
 flair
 jsonpickle
 stocktrends
+quantstats
+IPython
