@@ -3,13 +3,18 @@ import numpy as np
 import re
 from sklearn.metrics import classification_report, precision_score
 
-def get_info_model_evaluation(y_pred,y_test,symbol ,indicator_timeframe , retur_info_predict : bool = False ):
-    print(y_pred.shape, y_test.shape)
+# Inputs:
+#  pwd: str - path to the output folder relative to the starting directory.
+def get_info_model_evaluation(y_pred,y_test,symbol ,indicator_timeframe , retur_info_predict : bool = False, pwd : str = '', print_fn=None ):
+    if print_fn is None:
+        print_fn = print
+    print_string = f"y_pred: {y_pred.shape}, y_test: {y_test.shape}"
+    print_fn(print_string)
     info_predict = classification_report(y_true=y_test, y_pred=y_pred, digits=3)
-    print(info_predict)
+    print_fn(info_predict)
     df_info_predict = pd.DataFrame({"y_pred": y_pred, "y_test": y_test})
     # print(f'outputs/model_info/{symbol}_{indicator_timeframe}.csv')
-    df_info_predict.to_csv(f'outputs/model_info/{symbol}_{indicator_timeframe}.csv', sep='\t')
+    df_info_predict.to_csv(f'{pwd}outputs/model_info/{symbol}_{indicator_timeframe}.csv', sep='\t')
     df_details = pd.DataFrame()
     df_details['count'] = df_info_predict.value_counts().to_frame()
     df_details['per%'] = df_info_predict.value_counts(normalize=True).mul(100).round(2)
