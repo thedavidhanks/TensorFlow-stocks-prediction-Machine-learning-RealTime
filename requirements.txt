@@ -42,3 +42,4 @@ jsonpickle
 stocktrends
 quantstats
 IPython
+statsmodels
