@@ -2,3 +2,4 @@ __pycache__/*
 Tutorial/__pycache__/*
 utilW3/__pycache__/*
 Tutorial/outputs/log*.txt
+.env
