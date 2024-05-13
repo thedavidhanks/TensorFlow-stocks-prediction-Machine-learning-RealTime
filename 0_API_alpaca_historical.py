@@ -1,22 +1,28 @@
 import requests
 import pandas as pd
 import datetime as dt
+import os
 import time
 import json
+from dotenv import load_dotenv
 
 import _KEYS_DICT
 
-# Alpaca endpoint URL
+load_dotenv()
 
-API_KEY = "xxxxxxxxxx"
-API_SECRET = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-APCA_API_BASE_URL = 'https://paper-api.alpaca.markets'
+API_KEY = os.getenv("ALPACA_API_KEY")
+API_SECRET = os.getenv("ALPACA_API_SECRET")
+APCA_API_BASE_URL = 'https://paper-api.alpaca.markets/v2'
 data_url = 'wss://data.alpaca.markets'
 
 base_url = "https://data.alpaca.markets/v2/stocks/"
 
 # Your Alpaca API key ID and secret
-print("YOU MUST TO GET ALAPACA KEYS IN https://alpaca.markets/deprecated/docs/api-documentation/how-to/account/ ")
+# if API_KEY is None or API_SECRET is None or empty, then exit the program
+if API_KEY is None or API_SECRET is None or API_KEY == "" or API_SECRET == "":
+    print("YOU MUST TO GET ALAPACA KEYS IN https://alpaca.markets/learn/connect-to-alpaca-api/ ")
+    exit()
+
 headers = {
     'APCA-API-KEY-ID': API_KEY,
     'APCA-API-SECRET-KEY': API_SECRET,

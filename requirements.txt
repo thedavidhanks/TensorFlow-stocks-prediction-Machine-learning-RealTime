@@ -18,6 +18,7 @@ pandas_ta
 Pillow
 plotly
 pyine
+python-dotenv
 quantstats
 requests
 seaborn
