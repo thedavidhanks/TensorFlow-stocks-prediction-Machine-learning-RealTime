@@ -30,7 +30,6 @@ statsmodels
 stocktrends
 TA-Lib # https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib
 tensorflow  # Install latest Visual C++ https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
-tensorflow-gpu
 textblob
 torch
 tqdm
