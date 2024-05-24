@@ -1,24 +1,23 @@
 import requests
 import pandas as pd
-import datetime as dt
 import os
-import time
-import json
 from dotenv import load_dotenv
-
-import _KEYS_DICT
 
 load_dotenv()
 
+# Your Alpaca API key ID and secret
 API_KEY = os.getenv("ALPACA_API_KEY")
 API_SECRET = os.getenv("ALPACA_API_SECRET")
-APCA_API_BASE_URL = 'https://paper-api.alpaca.markets/v2'
-data_url = 'wss://data.alpaca.markets'
 
-base_url = "https://data.alpaca.markets/v2/stocks/"
+# Set your parameters
+START_DATE = '2019-01-01T00:00:00Z'
+END_DATE = '2023-10-07T23:59:59Z'
 
-# Your Alpaca API key ID and secret
-# if API_KEY is None or API_SECRET is None or empty, then exit the program
+# stock_lists is a list of stocks to fetch data for.
+# You may like to use _KEYS_DICT.COMPANYS to use preconfigured lists,
+# Such as _KEYS_DICT.DICT_COMPANYS["@FAV"]
+stocks_list = ["BABA"]
+
 if API_KEY is None or API_SECRET is None or API_KEY == "" or API_SECRET == "":
     print("YOU MUST TO GET ALAPACA KEYS IN https://alpaca.markets/learn/connect-to-alpaca-api/ ")
     exit()
@@ -27,7 +26,6 @@ headers = {
     'APCA-API-KEY-ID': API_KEY,
     'APCA-API-SECRET-KEY': API_SECRET,
 }
-
 
 def get_bars(symbol, start_date, end_date, timeframe='5Min', limit=10000):
     df_list = []  # List to hold batches of dataframes
@@ -45,7 +43,7 @@ def get_bars(symbol, start_date, end_date, timeframe='5Min', limit=10000):
         }
 
         # Make the GET request
-        # print(f"{base_url}{symbol}/bars",params )
+        base_url = "https://data.alpaca.markets/v2/stocks/"
         response = requests.get(f"{base_url}{symbol}/bars", headers=headers, params=params)
 
         # Check the response
@@ -89,18 +87,6 @@ def get_bars(symbol, start_date, end_date, timeframe='5Min', limit=10000):
     # Return the final DataFrame
     return final_df
 
-
-
-# Set your parameters
-# symbol = 'AAPL'  # Replace with the symbol you're interested in
-START_DATE = '2019-01-01T00:00:00Z'
-END_DATE = '2023-10-07T23:59:59Z'
-CSV_NAME = "@FAV"
-stocks_list = _KEYS_DICT.DICT_COMPANYS[CSV_NAME]
-stocks_list = ["SHOP", "NIO","RBLX", "TTD", "APPS", "ASAN",  "DOCN", "AFRM", "PINS"]
-stocks_list = [  "LYFT", "ADBE", "UBER", "ZI", "QCOM",  "SPOT", "NVDA", "PTON","CRWD", "NVST", "HUBS", "EPAM",  "SNAP",  "ETSY", "SOFI", "STNE","PDD", "INMD", "CRSR","AMZN","AMD" , "ADSK",  ]
-stocks_list = ["BABA"]
-
 for symbol in stocks_list:
     # Fetch the data
     print("Starting data fetching process Stock: ", symbol)
@@ -109,17 +95,17 @@ for symbol in stocks_list:
 
     # Save the data as a CSV file
     if df is not None:
-        #df.index = pd.to_datetime(df.index)#Get TypeError: Index must be DatetimeIndex
         TIME_ALPHA_OPEN = "13:30:00";TIME_ALPHA_CLOSE = "20:00:00";
         df = df.between_time(TIME_ALPHA_OPEN, TIME_ALPHA_CLOSE)
-        df['Date'] = df.index  #.to_pydatetime()
+        df['Date'] = df.index  
         # df.to_csv(f"data/alpa_{symbol}_1min.csv",sep="\t")
         # print(f"Data saved as ", f"data/alpa_{symbol}_1min.csv")
         max_recent_date = df.index.max().strftime("%Y%m%d")   # pd.to_datetime().strftime("%Y%m%d")
         min_recent_date = df.index.min().strftime("%Y%m%d")
-        print("d_price/alpaca/alpaca_" + symbol + '_' + '5Min' + "_" + max_recent_date + "__" + min_recent_date + ".csv")
-        # df.to_csv("d_price/alpaca/alpaca_" + symbol + '_' + '5Min' + "_" + max_recent_date + "__" + min_recent_date + ".csv",sep="\t", index=None)
-        df.to_csv("d_price/alpaca/alpaca_" + symbol + '_' + '5Min' + "_.csv",sep="\t", index=None)
+        file_loc = "d_price/alpaca/"
+        filename=f"alpaca_{symbol}_5Min_{max_recent_date}__{min_recent_date}_.csv"
+        print("Data saved as ", file_loc+filename)
+        df.to_csv(file_loc+filename,sep="\t", index=None)
         print("\tSTART: ", str(df.index.min()),  "  END: ", str(df.index.max()) , " shape: ", df.shape, "\n")
     else:
         print ("error none in stock: ", symbol)
